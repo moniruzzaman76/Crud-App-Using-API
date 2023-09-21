@@ -13,14 +13,14 @@ class Products {
 
   factory Products.toJson(Map<String, dynamic>json){
     return Products(
-      json['_id'],
-      json['ProductName'],
-      json['ProductCode'],
-      json['Img'],
-      json['UnitPrice'],
-      json['Qty'],
-      json['TotalPrice'],
-      json['CreatedDate'],
+      json['_id'] ?? "",
+      json['ProductName'] ?? "",
+      json['ProductCode'] ?? "",
+      json['Img'] ?? "",
+      json['UnitPrice'] ?? "",
+      json['Qty'] ?? "",
+      json['TotalPrice'] ?? "",
+      json['CreatedDate'] ?? "",
     );
   }
 }
