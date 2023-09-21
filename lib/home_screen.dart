@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crud/update_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'add_new_product_screen.dart';
@@ -15,7 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   List<Products>product=[];
+
   bool inProgress = false;
+  bool deleteProgress = false;
 
   @override
   void initState() {
@@ -39,6 +42,36 @@ class _HomeScreenState extends State<HomeScreen> {
      inProgress = false;
      setState(() {});
    }
+
+
+   Future<void> deleteProduct(String id)async{
+    deleteProgress = true;
+    if(mounted){
+      setState(() {});
+    }
+    final response = await get(Uri.parse("https://crud.teamrabbil.com/api/v1/DeleteProduct/$id"));
+    final Map<String,dynamic> jsonData = jsonDecode(response.body);
+    if(response.statusCode == 200 && jsonData["status"] == "success"){
+      getProduct();
+      if(mounted){
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Successfully Delete!")));
+      }
+      deleteProgress = false;
+      if(mounted){
+        setState(() {});
+      }
+
+    }else{
+      if(mounted){
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
+            content: Text("Delete Failed!")));
+      }
+    }
+   }
+
 
 
 
@@ -91,17 +124,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               ListTile(
-                                onTap: () {},
-                                leading: const Icon(Icons.edit),
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context)=> UpdateProductScreen(products:product[index],)));
+                                },
+                                leading: const Icon(Icons.edit,color: Colors.green,),
                                 title: const Text('Edit'),
                               ),
                               const Divider(
                                 height: 0,
                               ),
                               ListTile(
-                                onTap: () {},
-                                leading:
-                                const Icon(Icons.delete_forever_outlined),
+                                onTap: () {
+                                  deleteProduct(product[index].id);
+                                  Navigator.pop(context);
+                                },
+                                leading: const Icon(Icons.delete_forever_outlined,color: Colors.red,),
                                 title: const Text('Delete'),
                               ),
                             ],

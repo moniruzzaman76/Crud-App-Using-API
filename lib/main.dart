@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
       theme: ThemeData(
+        primarySwatch: Colors.blueGrey,
           inputDecorationTheme: const InputDecorationTheme(
             border: OutlineInputBorder(),
           )
